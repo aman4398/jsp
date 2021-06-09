@@ -57,6 +57,54 @@ public String getUemail() {
 public void setUemail(String uemail) {  
     this.uemail = uemail;  
 }  
+
+ConnectionProvider.java
+
+
+package bean;  
+import java.sql.*;  
+import static bean.Provider.*;  
+  
+public class ConnectionProvider {  
+private static Connection con=null;  
+static{  
+try{  
+Class.forName(DRIVER);  
+con=DriverManager.getConnection(CONNECTION_URL,USERNAME,PASSWORD);  
+}catch(Exception e){}  
+}  
+  
+public static Connection getCon(){  
+    return con;  
+}  
+  
+} 
+
+
+RegisterDao.java
+
+package bean;  
+  
+import java.sql.*;  
+  
+public class RegisterDao {  
+  
+public static int register(User u){  
+int status=0;  
+try{  
+Connection con=ConnectionProvider.getCon();  
+PreparedStatement ps=con.prepareStatement("insert into user432 values(?,?,?)");  
+ps.setString(1,u.getUname());  
+ps.setString(2,u.getUemail());  
+ps.setString(3,u.getUpass());  
+              
+status=ps.executeUpdate();  
+}catch(Exception e){}  
+      
+return status;  
+}  
+  
+}  
   
 }  
 
